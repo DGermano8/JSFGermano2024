@@ -1,0 +1,78 @@
+[metadata]
+name = "SIRS inference example"
+description = "Example of an SIRS model inference"
+filename = "sirs-inference.toml"
+date = "2023-08-22"
+
+[components]
+time = "pypfilt.Scalar"
+sampler = "pypfilt.sampler.LatinHypercube"
+summary = "pypfilt.summary.HDF5"
+
+[time]
+start = 0.0
+until = 400.0
+steps_per_unit = 1
+summaries_per_unit = 1
+
+[observations.I]
+# model = "sirs_model.NoisyStateObservation"
+model = "sirs_model.NegativeBinomailObservation"
+# model = "sirs_model.UniformObservation"
+
+[prior]
+S = { name = "constant", args.value = 99998 }
+R = { name = "constant", args.value = 0.0 }
+
+# if no intervention, set the time greater than the end of the simulation
+intervention_time = { name = "constant", args.value = 100.0 }
+intervention_magnitude = { name = "constant", args.value = 0.95}
+
+[scenario.inference]
+# components.model = "sirs_model.SIRS_ODE"
+components.model = "sirs_model.SIRS_JSF"
+observations.I.file = "outputs/sim_df.ssv"
+
+prior.I = { name = "constant", args.value = 2.0 }
+
+prior.betaCoef = { name = "uniform", args.loc = 1E-4, args.scale = 4.0 }
+prior.gammaCoef = { name = "uniform", args.loc = 1E-4, args.scale = 3.0 }
+prior.omegaCoef = { name = "uniform", args.loc = 1E-4, args.scale = 2.0 }
+prior.kappaCoef = { name = "constant", args.value = 85.0 }
+prior.muCoef = {name = "constant", args.value = 85.0 }
+
+summary.tables.model_cints.component = "pypfilt.summary.ModelCIs"
+summary.tables.model_cints.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+# summary.tables.backcasts.component = "sirs_model.BackcastStateCIs"
+summary.tables.backcasts.component = "pypfilt.summary.BackcastPredictiveCIs"
+summary.tables.backcasts.backcast_monitor = "backcast_monitor"
+summary.tables.backcasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+summary.tables.point_ests.component = "pypfilt.summary.ModelCIs"
+summary.tables.point_ests.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+
+# change the value of the predictions on betaCoef for the forecast
+
+summary.tables.forecasts.component = "pypfilt.summary.PredictiveCIs"
+summary.tables.forecasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+
+summary.tables.extinction_prob.component = "sirs_model.PrExtinction"
+
+# backcast_time = 60
+
+[filter]
+particles = 2000
+prng_seed = 2
+history_window = -1
+resample.threshold = 0.25
+regularisation.enabled = true
+
+[filter.regularisation.bounds]
+# I = { min = 0.0, max = 1E10 }
+betaCoef = { min = 1E-4, max = 1E10 }
+gammaCoef = { min = 1E-4, max = 1E10 }
+omegaCoef = { min = 1E-4, max = 1E10 }
+kappaCoef = { min = 1E-4, max = 1E10 }
+muCoef = { min = 1E-4, max = 1E10 }
+
+[summary.monitors]
+backcast_monitor.component = "pypfilt.summary.BackcastMonitor"

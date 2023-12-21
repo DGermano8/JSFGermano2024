@@ -1,0 +1,64 @@
+[metadata]
+name = ""
+description = ""
+author = "Alexander E. Zarebski"
+date = "2023-09-11"
+
+[components]
+time = "pypfilt.Scalar"
+sampler = "pypfilt.sampler.LatinHypercube"
+summary = "pypfilt.summary.HDF5"
+model = "src.tiv.TIV_ODE"
+
+[time]
+start = 0.0
+until = 7.0
+steps_per_unit = 1000
+summaries_per_unit = 1
+
+[observations.V]
+model = "src.tiv.Gaussian"
+scale = 1.5
+
+[prior]
+T0 = { name = "constant", args.value = 4E8 }
+I0 = { name = "constant", args.value = 0.0 }
+
+[scenario.inference]
+# Some helpful conversions
+# log(1.0E-6) = -13.8
+# log(1.0E-3) = -6.91
+# log(1.0E-2) = -4.61
+# log(1.0E0) = 0.00
+# log(1.0E1) = 2.30
+prior.lnV0 = { name = "uniform", args.loc = -6.91, args.scale = 13.8 }
+prior.beta = { name = "uniform", args.loc = 1.0E-6, args.scale = 1.0E-4 }
+prior.p = { name = "uniform", args.loc = 1.0E-3, args.scale = 1.0E-2 }
+prior.c = { name = "uniform", args.loc = 1.0, args.scale = 1.0E1 }
+prior.gamma = { name = "uniform", args.loc = 1.0, args.scale = 1.0E1 }
+summary.tables.model_cints.component = "pypfilt.summary.ModelCIs"
+summary.tables.model_cints.credible_intervals = [10, 20, 30, 40, 50, 60, 70, 80, 90]
+summary.tables.point_ests.component = "pypfilt.summary.ModelCIs"
+summary.tables.point_ests.credible_intervals = [0, 95]
+
+[filter]
+particles = 2000
+prng_seed = 1
+history_window = -1
+resample.threshold = 0.25
+regularisation.enabled = true
+
+[filter.regularisation.bounds]
+beta = { min = 0.0, max = 1E10 }
+p = { min = 0.0, max = 1E10 }
+lnV0 = { min = -20.0, max = 10.0 }
+c = { min = 0.0, max = 1E10 }
+gamma = { min = 0.0, max = 1E10 }
+
+[summary.monitors]
+backcast_monitor.component = "pypfilt.summary.BackcastMonitor"
+
+[summary.tables]
+backcasts.component = "src.tiv.BackcastStateCIs"
+backcasts.backcast_monitor = "backcast_monitor"
+backcasts.credible_intervals = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]

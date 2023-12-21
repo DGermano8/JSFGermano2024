@@ -1,0 +1,108 @@
+[metadata]
+name = ""
+description = ""
+author = "Alexander E. Zarebski"
+date = "2023-09-11"
+
+[components]
+time = "pypfilt.Scalar"
+sampler = "pypfilt.sampler.LatinHypercube"
+summary = "pypfilt.summary.HDF5"
+model = "src.tiv.RefractoryCellModel_JSF"
+# model = "src.tiv.TIV_ODE"
+
+[time]
+start = 0.0
+until = 21.0
+steps_per_unit = 1
+summaries_per_unit = 1
+
+[observations.V]
+model = "src.tiv.Gaussian"
+# scale = 1.5
+scale = 1.0
+
+[prior]
+T0 = { name = "constant", args.value = 8E7 }
+E0 = { name = "constant", args.value = 1.0 }
+I0 = { name = "constant", args.value = 0.0 }
+R0 = { name = "constant", args.value = 0.0 }
+# V0 = { name = "constant", args.value = 0.0 }
+
+[scenario.inference]
+# Some helpful conversions
+# log(1.0E-6) = -13.8
+# log(1.0E-3) = -6.91
+# log(1.0E-2) = -4.61
+# log(1.0E0) = 0.00
+# log(1.0E1) = 2.30
+prior.lnV0 = { name = "uniform", args.loc = 0, args.scale = 5 }
+# prior.lnV0 = { name = "constant", args.value = -1.0 }
+prior.c = { name = "constant", args.value = 10.0}
+prior.k = { name = "constant", args.value = 4.0}
+
+# prior.beta = { name = "uniform", args.loc = 1.0E-10, args.scale = 1.0E-8}
+# prior.phi = { name = "uniform", args.loc = 1.0E-6, args.scale = 1.0E-4}
+# prior.rho = { name = "uniform", args.loc = 1.0E-3, args.scale = 1.0E-1}
+# prior.delta = { name = "uniform", args.loc = 1.0, args.scale = 3}
+# prior.pi = { name = "uniform", args.loc = 350, args.scale = 50}
+prior.beta = { name = "uniform", args.loc = 0, args.scale = 10}
+prior.phi = { name = "uniform", args.loc = 0, args.scale = 10}
+prior.rho = { name = "uniform", args.loc = 0, args.scale = 0.024}
+prior.delta = { name = "uniform", args.loc = 1.0, args.scale = 3}
+prior.pi = { name = "uniform", args.loc = 350, args.scale = 60}
+
+# summary.tables.model_cints.component = "pypfilt.summary.ModelCIs"
+# summary.tables.model_cints.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+# summary.tables.point_ests.component = "pypfilt.summary.ModelCIs"
+# summary.tables.point_ests.credible_intervals = [0, 95]
+
+summary.tables.model_cints.component = "pypfilt.summary.ModelCIs"
+summary.tables.model_cints.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+# summary.tables.backcasts.component = "src.tiv.BackcastStateCIs"
+summary.tables.backcasts.component = "pypfilt.summary.BackcastPredictiveCIs"
+summary.tables.backcasts.backcast_monitor = "backcast_monitor"
+summary.tables.backcasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+summary.tables.point_ests.component = "pypfilt.summary.ModelCIs"
+summary.tables.point_ests.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+summary.tables.covariencetable.component = 'pypfilt.summary.ParamCovar'
+
+
+
+summary.tables.forecasts.component = "pypfilt.summary.PredictiveCIs"
+summary.tables.forecasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
+
+summary.tables.extinction_prob.component = "src.tiv.PrExtinction"
+
+[filter]
+particles = 2000
+prng_seed = 10
+history_window = -1
+resample.threshold = 0.25
+regularisation.enabled = true
+
+[filter.regularisation.bounds]
+lnV0 = { min = 0, max = 1E6 }
+# beta = { min = 1E-10, max = 1E-8 }
+# phi = { min = 1E-6, max = 1E-4 }
+# rho = { min = 1E-4, max = 1E-1 }
+# delta = { min = 1.0, max = 4 }
+# pi = { min = 350.0, max = 400.0 }
+
+beta = { min = 1E-4, max = 1E4 }
+phi = { min =1E-4, max = 1E4 }
+rho = { min = 1E-4, max = 1E-1 }
+delta = { min = 1.0, max = 4 }
+pi = { min = 350.0, max = 400.0 }
+
+# lnV0 = { min = 0.0, max = 10.0 }
+c = { min = 9.0, max = 11.0 }
+k = { min = 3.0, max = 4.0 }
+
+[summary.monitors]
+backcast_monitor.component = "pypfilt.summary.BackcastMonitor"
+
+# [summary.tables]
+# backcasts.component = "src.tiv.BackcastStateCIs"
+# backcasts.backcast_monitor = "backcast_monitor"
+# backcasts.credible_intervals = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]

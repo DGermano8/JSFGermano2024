@@ -1,0 +1,67 @@
+#+title: SIS example using =pypfilt=
+
+* Model
+
+** Stoichiometric
+
+Here are the reactant and products as needed by the hybrid model and
+the flows as needed by the CTMC model.
+
+|             | *Reactants* |     | *Products* |     | *Flow* |     |
+|-------------+-------------+-----+------------+-----+--------+-----|
+| *Rate*      |         $S$ | $I$ |        $S$ | $I$ |    $S$ | $I$ |
+|-------------+-------------+-----+------------+-----+--------+-----|
+| $\beta / N$ |           1 |   1 |          0 |   2 |     -1 |   1 |
+| $\gamma$    |           0 |   1 |          1 |   0 |      1 |  -1 |
+
+** Differential equations
+
+Here are the differential equations used by the ODE model:
+
+\[
+\frac{dS}{dt} = -\beta SI / N + \gamma I
+\]
+
+and
+
+\[
+\frac{dI}{dt} = \beta SI / N - \gamma I
+\]
+
+* Simulations
+
+#+caption: Simulations with the ODE model
+#+name: fig:sim-ode
+#+attr_org: :width 500px
+#+attr_html: :width 400px
+[[./out/simulation-ode.png]]
+
+#+caption: Simulations with the CTMC model
+#+name: fig:sim-ctmc
+#+attr_org: :width 500px
+#+attr_html: :width 400px
+[[./out/simulation-ctmc.png]]
+
+#+caption: Simulations with the hybrid model
+#+name: fig:sim-hybrid
+#+attr_org: :width 500px
+#+attr_html: :width 400px
+[[./out/simulation-hybrid.png]]
+
+* Inference example
+
+* Environment
+
+The [[file:./requirements.txt][requirements.txt]] file contains a description of the packages (and
+versions) needed to run this.
+
+** Setting up the environment
+
+Use the following to set up a virtual environment.
+
+#+begin_src sh
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -U pip
+  pip install -r requirements.txt
+#+end_src

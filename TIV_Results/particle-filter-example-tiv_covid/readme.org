@@ -1,0 +1,148 @@
+#+title: TIV example using =pypfilt=
+
+* Data
+
+| patient | day | log10_tcid |
+|---------+-----+------------|
+|       1 |   1 |        2.0 |
+|       1 |   2 |        5.5 |
+|       1 |   3 |        4.0 |
+|       1 |   4 |        5.5 |
+|       1 |   5 |        3.0 |
+|       1 |   6 |      <=0.5 |
+|       1 |   7 |      <=0.5 |
+|       1 |   8 |      <=0.5 |
+|       2 |   1 |        1.0 |
+|       2 |   2 |        6.0 |
+|       2 |   3 |        3.0 |
+|       2 |   4 |        1.5 |
+|       2 |   5 |        3.5 |
+|       2 |   6 |        1.3 |
+|       2 |   7 |      <=0.5 |
+|       2 |   8 |      <=0.5 |
+|       3 |   1 |        2.5 |
+|       3 |   2 |        5.0 |
+|       3 |   3 |        5.0 |
+|       3 |   4 |        3.0 |
+|       3 |   5 |        5.5 |
+|       3 |   6 |        3.5 |
+|       3 |   7 |      <=0.5 |
+|       3 |   8 |      <=0.5 |
+|       4 |   1 |        3.5 |
+|       4 |   2 |        5.5 |
+|       4 |   3 |        6.5 |
+|       4 |   4 |        5.5 |
+|       4 |   5 |        3.5 |
+|       4 |   6 |        4.0 |
+|       4 |   7 |      <=0.5 |
+|       4 |   8 |      <=0.5 |
+|       5 |   1 |        2.5 |
+|       5 |   2 |        3.0 |
+|       5 |   3 |        6.5 |
+|       5 |   4 |        6.5 |
+|       5 |   5 |        2.0 |
+|       5 |   6 |        0.8 |
+|       5 |   7 |      <=0.5 |
+|       5 |   8 |      <=0.5 |
+|       6 |   1 |        4.0 |
+|       6 |   2 |        5.0 |
+|       6 |   3 |        5.5 |
+|       6 |   4 |        7.5 |
+|       6 |   5 |        5.5 |
+|       6 |   6 |        1.3 |
+|       6 |   7 |      <=0.5 |
+|       6 |   8 |      <=0.5 |
+
+* Model
+
+** Differential equations
+
+Here are the differential equations used by the ODE model:
+
+\[
+\frac{dT}{dt} = -\beta T V,
+\]
+
+\[
+\frac{dI}{dt} = \beta T V - \gamma I,
+\]
+
+and
+
+\[
+\frac{dV}{dt} = p I - c V,
+\]
+
+** Stoichiometric
+
+Here are the reactant and products as needed by the hybrid model and
+the flows as needed by the CTMC model.
+
+|          | *Reactants* |     |     | *Products* |     |     | *Flow* |     |     |
+|----------+-------------+-----+-----+------------+-----+-----+--------+-----+-----|
+| *Rate*   |         $T$ | $I$ | $V$ |        $T$ | $I$ | $V$ |    $T$ | $I$ | $V$ |
+|----------+-------------+-----+-----+------------+-----+-----+--------+-----+-----|
+| $\beta$  |           1 |   0 |   1 |          0 |   1 |   1 |     -1 |   1 |   0 |
+| $\gamma$ |           0 |   1 |   0 |          0 |   0 |   0 |      0 |  -1 |   0 |
+| $p$      |           0 |   1 |   0 |          0 |   1 |   1 |      0 |   0 |   1 |
+| $c$      |           0 |   0 |   1 |          0 |   0 |   0 |      0 |   0 |  -1 |
+
+* Simulation/inference example
+
+The =run-inference-from-simulation.py= script runs a program which
+simulates a data set and then uses an ODE model (with a particle
+filter) to estimate the parameters that where used.
+
+You can run this (after activating the virutal environment) with
+
+#+begin_src sh
+  python run-inference-from-simulation.py
+#+end_src
+
+Look in the output directory for the results.
+
+* Inference example
+
+We do the inference of V0 in log-space, but it doesn't seem to help
+with the rates because they are small, but only vary over a small
+range in the least-squares fit anyway. We could also achieve a similar
+result but by using a more appropriate prior distribution to ensure
+the relevant part of parameter space is well covered.
+
+You can run the inference CLI tool (after activating the virtual
+environment) with command such as the following:
+
+#+begin_src sh
+  python run-inf-cli.py --out out/patient-1 --input_toml cli-tiv-demo.toml --obs_ssv data/patient-1-censored.ssv --param_plots
+#+end_src
+
+This stores results in the =out/patient-1= directory and uses the
+=cli-tiv-demo.toml= to specify the inference scenario in terms of the
+process defined in =src/tiv.py=. The data provided to the inference is
+in =data/patient-1-censored.ssv= and =--param_plots= tells the script
+that we want visualisations of the marginal posterior distributions.
+
+** TODO Use the JSF for the simulation
+
+* Environment
+
+The [[file:./requirements.txt][requirements.txt]] file contains a description of the packages (and
+versions) needed to run this.
+
+** Setting up the environment
+
+Use the following to set up a virtual environment.
+
+#+begin_src sh
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -U pip
+  pip install -r requirements.txt
+#+end_src
+
+and to check I am not making any obvious errors, this is how we can
+use =mypy=.
+
+#+begin_src sh
+  mypy run-inf-cli.py run-inference-from-simulation.py src/inf.py
+#+end_src

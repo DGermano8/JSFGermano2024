@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="tiv" basedir=".">
+
+  <description>
+    Do some stuff...
+
+    1. preprocessing
+    2. runsimulation
+    3. runinference
+
+    n. test
+  </description>
+
+  <target name="preprocessing" depends="plot-raw-data"/>
+
+  <target name="plot-raw-data">
+    <exec executable="python">
+      <arg path="src/preprocessing-1.py" />
+    </exec>
+  </target>
+
+  <target name="runsimulation"
+	  description="Generate plots using parameters from Baccam et al (2006)">
+    <exec executable="python">
+      <arg path="src/run-simulation.py" />
+    </exec>
+  </target>
+
+  <target name="runinference"
+	  depends="runodeinference"
+	  description="Run inference of parameters"/>
+
+  <target name="runodeinference"
+	  depends="preprocessing">
+    <exec executable="python">
+      <arg path="src/run-ode-inference.py" />
+    </exec>
+  </target>
+
+  <target name="test">
+    <exec executable="python">
+      <arg path="src/tests.py" />
+    </exec>
+  </target>
+
+</project>
