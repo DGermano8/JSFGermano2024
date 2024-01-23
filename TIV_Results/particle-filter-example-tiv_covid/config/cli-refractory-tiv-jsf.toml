@@ -76,7 +76,7 @@ summary.tables.snapshot.component = "pypfilt.summary.EnsembleSnapshot"
 
 
 [filter]
-particles = 10
+particles = 2000
 prng_seed = 10
 history_window = -1
 resample.threshold = 0.25
