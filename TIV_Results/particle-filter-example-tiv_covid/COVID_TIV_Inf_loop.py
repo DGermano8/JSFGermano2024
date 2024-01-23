@@ -55,6 +55,9 @@ for ii in range(0, len(patient_list)):
         pst_param_df = pst_param_df[pst_param_df['name'].isin(param_names)]
         pst_param_df = pst_param_df[['prob','ymin', 'ymax', 'name']]
 
+        snpsht_df = pd.DataFrame(fit_result.estimation.tables['snapshot'])
+        snpsht_df.to_csv(f"{out_dir}/snpsht_df.csv", index=False)
+
         betaEst = pst_df[pst_df['name'] == 'beta']
         betaEst.to_csv(f"{out_dir}/betaEst.csv", index=False)
         phiEst = pst_df[pst_df['name'] == 'phi']

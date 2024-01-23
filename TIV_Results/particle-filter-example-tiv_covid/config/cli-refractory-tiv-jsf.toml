@@ -67,15 +67,16 @@ summary.tables.point_ests.component = "pypfilt.summary.ModelCIs"
 summary.tables.point_ests.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
 summary.tables.covariencetable.component = 'pypfilt.summary.ParamCovar'
 
-
-
 summary.tables.forecasts.component = "pypfilt.summary.PredictiveCIs"
 summary.tables.forecasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
 
 summary.tables.extinction_prob.component = "src.tiv.PrExtinction"
 
+summary.tables.snapshot.component = "pypfilt.summary.EnsembleSnapshot"
+
+
 [filter]
-particles = 2000
+particles = 10
 prng_seed = 10
 history_window = -1
 resample.threshold = 0.25
