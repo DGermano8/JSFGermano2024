@@ -108,7 +108,7 @@ class RefractoryCellModel_JSF(Model):
         """
         assert time_step.dt==1
         _my_opts = {'EnforceDo': [0, 0, 0, 0, 0],
-                    'dt': 0.00005,
+                    'dt': 0.00001,
                     'SwitchingThreshold': [self.threshold,
                                            self.threshold,
                                            self.threshold,
