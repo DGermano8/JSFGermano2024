@@ -4,7 +4,8 @@ import pypfilt                  # type: ignore
 from pypfilt.model import Model # type: ignore
 from pypfilt.obs import Univariate, Obs # type: ignore
 import pdb
-import src.JSF_Solver_BasePython as JSF
+# import src.JSF_Solver_BasePython as JSF
+import jsf as JSF
 import statsmodels.stats.weightstats as smws
 
 from pypfilt.io import time_field
@@ -108,7 +109,7 @@ class RefractoryCellModel_JSF(Model):
         """
         assert time_step.dt==1
         _my_opts = {'EnforceDo': [0, 0, 0, 0, 0],
-                    'dt': 0.00001,
+                    'dt': 0.00005,
                     'SwitchingThreshold': [self.threshold,
                                            self.threshold,
                                            self.threshold,

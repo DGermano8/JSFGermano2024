@@ -124,5 +124,7 @@ for ii in range(0, len(patient_list)):
         state_p9.save(f"{out_dir}/demo-state-trajectory.png",
                             height = 4.1, width = 5.8)
     
-    except:
+    except Exception as e:
+        print(e)
         print('Error')
+    

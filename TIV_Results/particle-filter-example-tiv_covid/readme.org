@@ -146,3 +146,30 @@ use =mypy=.
 #+begin_src sh
   mypy run-inf-cli.py run-inference-from-simulation.py src/inf.py
 #+end_src
+
+
+YOU MUST INSTALL A LOCAL COPY OF JSF FOR THIS TO WORK
+
+--------------------------------------------------------------------------------
+                          TO RUN THE INFERENCE
+--------------------------------------------------------------------------------
+The model is written in the file src/tiv.py. Here, the model is defined as a
+jsf method. 
+- threshold parameter, \Omega, is set here: threshold = 100
+- Stoichiometric matricies are defined here as: _nu_reactants and _nu_products
+- the propensity functions are contained in _rates(self, x, theta, time)
+- in update, _my_opts defines 'EnforceDo', the time step, 'dt', and the switch
+  between the CTMC and ODE models for each state variable, as 'SwitchingThreshold'
+
+
+The inference is run using the file COVID_TIV_Inf.py.
+Here, each patient is analysed independently. The data is read in from the files
+stored in the data folder.
+
+The configuration file is read in from the file cli-refractory-tiv-jsf.toml.
+This file contains the following information:
+- the number of particles to use in the particle filter
+- the number of iterations to run the particle filter for
+- the state parameters initial values
+- the prior distributions for the parameters
+- the observation model
