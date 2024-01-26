@@ -140,6 +140,20 @@ Use the following to set up a virtual environment.
   pip install -r requirements.txt
 #+end_src
 
+
+
+
+
+TODO - Explain how to install a local copy of jsf by cloning the package from GitHub.
+
+TODO - Explain that you need to run the COVID.*py script to run the actual compute.
+
+TODO - Explain that the figure generation is done by the .m scripts in the =processing/= directory.
+
+
+
+
+
 and to check I am not making any obvious errors, this is how we can
 use =mypy=.
 
