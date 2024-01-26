@@ -165,7 +165,7 @@ use =mypy=.
 YOU MUST INSTALL A LOCAL COPY OF JSF FOR THIS TO WORK
 
 --------------------------------------------------------------------------------
-                          TO RUN THE INFERENCE
+* TO RUN THE INFERENCE
 --------------------------------------------------------------------------------
 The model is written in the file src/tiv.py. Here, the model is defined as a
 jsf method. 
@@ -189,7 +189,7 @@ This file contains the following information:
 - the observation model
 
 --------------------------------------------------------------------------------
-                          TO GENERATE THE FIGURES
+* TO GENERATE THE FIGURES
 --------------------------------------------------------------------------------
 Figure generation is done in the folder processing, using MATLAB to plot.
 First, the data from the "outputs" folder is should be imported over into the 
