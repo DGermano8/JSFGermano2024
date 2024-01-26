@@ -187,3 +187,10 @@ This file contains the following information:
 - the state parameters initial values
 - the prior distributions for the parameters
 - the observation model
+
+--------------------------------------------------------------------------------
+                          TO GENERATE THE FIGURES
+--------------------------------------------------------------------------------
+Figure generation is done in the folder processing, using MATLAB to plot.
+First, the data from the "outputs" folder is should be imported over into the 
+"Data" folder. 
