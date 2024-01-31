@@ -2,7 +2,7 @@ contourpy==1.1.0
 cycler==0.11.0
 fonttools==4.41.1
 h5py==3.9.0
-# jsf==0.1
+jsf @ file:///Users/domenicgermano/Desktop/SIR_RA_LIT/Code/jsf_pck
 kiwisolver==1.4.4
 lhs==0.4.1
 matplotlib==3.7.2

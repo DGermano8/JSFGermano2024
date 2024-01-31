@@ -13,7 +13,7 @@ model = "src.tiv.RefractoryCellModel_JSF"
 
 [time]
 start = 0.0
-until = 21.0
+until = 5.0
 steps_per_unit = 1
 summaries_per_unit = 1
 
@@ -21,6 +21,20 @@ summaries_per_unit = 1
 model = "src.tiv.Gaussian"
 # scale = 1.5
 scale = 1.0
+[observations.T]
+model = "src.tiv.Gaussian"
+scale = 1.0
+[observations.E]
+model = "src.tiv.Gaussian"
+scale = 1.0
+[observations.I]
+model = "src.tiv.Gaussian"
+scale = 1.0
+[observations.R]
+model = "src.tiv.Gaussian"
+scale = 1.0
+
+
 
 [prior]
 T0 = { name = "constant", args.value = 8E7 }
