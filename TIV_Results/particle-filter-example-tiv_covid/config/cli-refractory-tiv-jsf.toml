@@ -13,7 +13,7 @@ model = "src.tiv.RefractoryCellModel_JSF"
 
 [time]
 start = 0.0
-until = 5.0
+until = 21.0
 steps_per_unit = 1
 summaries_per_unit = 1
 
@@ -33,7 +33,6 @@ scale = 1.0
 [observations.R]
 model = "src.tiv.Gaussian"
 scale = 1.0
-
 
 
 [prior]
@@ -63,8 +62,8 @@ prior.k = { name = "constant", args.value = 4.0}
 prior.beta = { name = "uniform", args.loc = 0, args.scale = 10}
 prior.phi = { name = "uniform", args.loc = 0, args.scale = 10}
 prior.rho = { name = "uniform", args.loc = 0, args.scale = 0.024}
-prior.delta = { name = "uniform", args.loc = 1.0, args.scale = 3}
-prior.pi = { name = "uniform", args.loc = 350, args.scale = 60}
+prior.delta = { name = "uniform", args.loc = 1.0, args.scale = 10}
+prior.pi = { name = "uniform", args.loc = 350, args.scale = 150}
 
 # summary.tables.model_cints.component = "pypfilt.summary.ModelCIs"
 # summary.tables.model_cints.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
@@ -90,7 +89,7 @@ summary.tables.snapshot.component = "pypfilt.summary.EnsembleSnapshot"
 
 
 [filter]
-particles = 10
+particles = 200
 prng_seed = 10
 history_window = -1
 resample.threshold = 0.25
@@ -107,8 +106,8 @@ lnV0 = { min = 0, max = 1E6 }
 beta = { min = 1E-4, max = 1E4 }
 phi = { min =1E-4, max = 1E4 }
 rho = { min = 1E-4, max = 1E-1 }
-delta = { min = 1.0, max = 4 }
-pi = { min = 350.0, max = 400.0 }
+delta = { min = 1.0, max = 10 }
+pi = { min = 350.0, max = 800.0 }
 
 # lnV0 = { min = 0.0, max = 10.0 }
 c = { min = 9.0, max = 11.0 }

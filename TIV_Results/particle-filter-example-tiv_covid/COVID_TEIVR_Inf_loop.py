@@ -47,7 +47,7 @@ for ii in range(0, len(patient_list)):
         mrgs = {p : prior[p]
                     for p in param_names if has_prior(p) }
 
-        forecast_time = 4
+        forecast_time = 15
 
         fit_result = pypfilt.forecast(inf_ctx, [forecast_time], filename=None)
 
