@@ -18,7 +18,7 @@ output_csv = "out/estimate_df.csv"
 params_df = pd.read_csv(input_csv)
 final_time = params_df["time"].max()
 params_df = params_df[params_df["time"] == final_time]
-param_names = ["beta", "delta", "pi", "phi", "rho"]
+param_names = ["lnV0", "beta", "delta", "pi", "phi", "rho"]
 params_df = params_df[param_names]
 
 # We can approximate the MAP by fitting a KDE and selecting the
