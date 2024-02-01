@@ -24,19 +24,25 @@ clear_rate = 10.0
 # for each of the patients.
 
 # TODO We also neet to compute the within-host R0 for this since that
-# is something we want to compare.
+# is something we want to compare. And also, this should be vectorised
+# over all of the patients in a sensible way.
 
 with open(input_est) as file:
     ke2022daily_estimates = json.load(file)
+    ke2022daily_df = pd.DataFrame(
+        {var: [val] for var, val in ke2022daily_estimates["451152"].items()}
+    )
 
 # There is a lot of data in the snapshot dataframe, but we only need
 # the parameter values at the final time point. So, we can filter out
-# the rest.
+# the rest. NOTE that we also rename the column to be capitalised for
+# "phi" since this is what the Ke et al (2022) paper did.
 
 params_df = pd.read_csv(input_csv)
 final_time = params_df["time"].max()
 params_df = params_df[params_df["time"] == final_time]
-param_names = ["lnV0", "beta", "delta", "pi", "phi", "rho"]
+params_df = params_df.rename(columns={"phi": "Phi"})
+param_names = ["lnV0", "beta", "delta", "pi", "Phi", "rho"]
 params_df = params_df[param_names]
 
 # We can approximate the MAP by fitting a KDE and selecting the
@@ -58,19 +64,25 @@ mean_dict["method"] = "mean"
 mean_df = pd.DataFrame(mean_dict)
 
 # Always a good idea to get a recording of the actual values to refer
-# to later. But the plots are also a good way to see how the results
-# differ between the element-wise mean the and MAP.
+# to later.
 
 summary_df = pd.concat([map_df, mean_df])
 summary_df.to_csv(output_csv, index=False)
 
+# Include bi-variate scatter plots and the estimates so we know what
+# is going on here.
+
 for i in range(len(param_names)):
     for j in range(i+1, len(param_names)):
-        scatter_p9 = (p9.ggplot(params_df, p9.aes(x=param_names[i], y=param_names[j]))
+        scatter_p9 = (p9.ggplot(params_df,
+                                p9.aes(x=param_names[i],
+                                       y=param_names[j]))
                       + p9.geom_point()
                       + p9.geom_point(mean_df, size=5, color='red')
                       + p9.geom_point(map_df, size=5, color='blue')
                       + p9.theme_bw())
+        if param_names[i] != "lnV0" and param_names[j] != "lnV0":
+            scatter_p9 += p9.geom_point(ke2022daily_df, size=5, color='green')
         scatter_p9.save(output_png_func(param_names[i], param_names[j]),
                         height=4, width=6, dpi=300)
 
