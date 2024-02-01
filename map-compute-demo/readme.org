@@ -1,0 +1,9 @@
+
+1. [-] Include within-host R0 into the calculations
+   - [X] Use approximate R0 based on no refractory process: \(T_{0}\pi\beta/c\delta\).
+   - [ ] Derive the complete R0 for this model and update to that
+2. [ ] Incorporate uncertainty into the calculations
+   - [X] Use empirical quantiles
+   - [ ] Use a nice density estimate
+3. [ ] Export everything into a LaTeX table ([[https://github.com/JAEarly/latextable][latextable]])
+   - Include MAP, uncertainty and Ke's estimates
