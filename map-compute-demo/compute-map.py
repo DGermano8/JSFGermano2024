@@ -55,6 +55,23 @@ kernel = stats.gaussian_kde(params_mat)
 kernal_pdf_vals = kernel(params_mat)
 idx = kernal_pdf_vals.argmax()
 
+summary_records = []
+for ix, var in enumerate(param_names):
+    bounds = params_df[var].quantile([0.025, 0.975]).to_list()
+    summary_records.append(
+        {"patient": "451152",
+         "parameter": var,
+         "estimate": params_mat[ix, idx],
+         "lower": bounds[0],
+         "upper": bounds[1],
+         "source": "MAP"}
+    )
+summary_df = pd.DataFrame(summary_records)
+summary_df.to_csv(output_csv, index=False)
+
+# Include bi-variate scatter plots and the estimates so we know what
+# is going on here.
+
 map_dict = {var: [params_mat[i, idx]] for i, var in enumerate(param_names)}
 map_dict["method"] = "map"
 map_df = pd.DataFrame(map_dict)
@@ -62,15 +79,6 @@ map_df = pd.DataFrame(map_dict)
 mean_dict = {var: [params_df[var].mean()] for var in param_names}
 mean_dict["method"] = "mean"
 mean_df = pd.DataFrame(mean_dict)
-
-# Always a good idea to get a recording of the actual values to refer
-# to later.
-
-summary_df = pd.concat([map_df, mean_df])
-summary_df.to_csv(output_csv, index=False)
-
-# Include bi-variate scatter plots and the estimates so we know what
-# is going on here.
 
 for i in range(len(param_names)):
     for j in range(i+1, len(param_names)):
@@ -101,7 +109,10 @@ withinhost_r0 = withinhost_r0.melt(var_name="patient",
 tmp = ke2022daily_estimates["451152"]
 ke_withinhost_r0 = pd.DataFrame(
     {"patient": ["451152"],
-     "withinhost_r0": [(tmp["pi"] * (tmp["beta"] * 1e-9) * T0 / (tmp["delta"] * clear_rate))]}
+     "withinhost_r0": [(tmp["pi"] * (tmp["beta"] * 1e-9) * T0 / (tmp["delta"] * clear_rate))],
+     "lower": None,
+     "upper": None,
+     "source": ["Ke et al. (2022)"]}
 )
 del(tmp)
 
@@ -114,3 +125,23 @@ withinhost_r0_p9 = (p9.ggplot(withinhost_r0, p9.aes(x="patient", y="withinhost_r
                     + p9.theme_bw())
 
 withinhost_r0_p9.save("out/withinhost_r0.png", height=4, width=6, dpi=300)
+
+# Compute a summary of the estimates of the within-host R0 for each
+# patient.
+
+def calculate_summary(group):
+    withinhost_r0_array = group["withinhost_r0"].to_numpy().T
+    kernel = stats.gaussian_kde(withinhost_r0_array)
+    kernal_pdf_vals = kernel(withinhost_r0_array)
+    idx = kernal_pdf_vals.argmax()
+    map_est = withinhost_r0_array[idx]
+    return pd.Series({
+        "withinhost_r0": map_est,
+        "lower": group["withinhost_r0"].quantile(0.025),
+        "upper": group["withinhost_r0"].quantile(0.975),
+        "source": "MAP"
+    })
+
+withinhost_r0_summary = withinhost_r0.groupby("patient").apply(calculate_summary).reset_index()
+withinhost_r0_summary = withinhost_r0_summary._append(ke_withinhost_r0)
+withinhost_r0_summary.to_csv("out/withinhost_r0_summary.csv", index=False)
