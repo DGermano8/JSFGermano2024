@@ -34,15 +34,15 @@ the flows as needed by the CTMC model.
 
 Here are the differential equations used by the ODE model:
 
-$\frac{dT}{dt} &= - \beta V T - \Phi I T + \rho R$,
+$\frac{dT}{dt} = - \beta V T - \Phi I T + \rho R$,
 
-$\frac{dE}{dt} &= \beta V T - k E$,
+$\frac{dE}{dt} = \beta V T - k E$,
 
-$\frac{dI}{dt} &= k E - \delta I$,
+$\frac{dI}{dt} = k E - \delta I$,
 
-$\frac{dV}{dt} &= \pi I - c V$,
+$\frac{dV}{dt} = \pi I - c V$,
 
-$\frac{dR}{dt} &= \Phi I T - \rho R$.
+$\frac{dR}{dt} = \Phi I T - \rho R$.
 
 
 * Simulation and Inference
