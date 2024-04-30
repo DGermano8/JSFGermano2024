@@ -33,8 +33,11 @@ $\frac{dI}{dt} = +\gamma I - \mu R - \omega R $
 
 
 * Simulations
-
-* Inference example
+The exact settings to describe the simulation are set in the file [[file:./sirs-simulation.toml]].
+To run the simulations, use the following command:
+#+begin_src sh
+  python3 run-simulations.py
+#+end_src
 
 * Environment
 
