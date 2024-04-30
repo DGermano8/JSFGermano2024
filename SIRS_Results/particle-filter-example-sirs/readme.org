@@ -25,32 +25,14 @@ the flows as needed by the CTMC model.
 
 Here are the differential equations used by the ODE model:
 
-$\frac{dS}{dt} = -\beta SI / N - \mu S + \kappa (S + I + R) + \omegaR$
+$\frac{dS}{dt} = -\frac{\beta SI}{N} - \mu S + \kappa (S + I + R) + \omega R$
 
-$\frac{dI}{dt} = +\beta SI / N - \gamma I - \mu I $
+$\frac{dI}{dt} = +\frac{\beta SI}{N} - \gamma I - \mu I $
 
 $\frac{dI}{dt} = +\gamma I - \mu R - \omega R $
 
 
 * Simulations
-
-#+caption: Simulations with the ODE model
-#+name: fig:sim-ode
-#+attr_org: :width 500px
-#+attr_html: :width 400px
-[[./out/simulation-ode.png]]
-
-#+caption: Simulations with the CTMC model
-#+name: fig:sim-ctmc
-#+attr_org: :width 500px
-#+attr_html: :width 400px
-[[./out/simulation-ctmc.png]]
-
-#+caption: Simulations with the hybrid model
-#+name: fig:sim-hybrid
-#+attr_org: :width 500px
-#+attr_html: :width 400px
-[[./out/simulation-hybrid.png]]
 
 * Inference example
 
