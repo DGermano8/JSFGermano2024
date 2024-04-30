@@ -33,11 +33,28 @@ $\frac{dI}{dt} = +\gamma I - \mu R - \omega R $
 
 
 * Simulations
-The exact settings to describe the simulation are set in the file [[file:./sirs-simulation.toml]].
+The exact settings to describe the simulation are set in the file [[file:./sirs-simulation.toml]]. 
+Here, you set: 
+- the initial conditions,
+- the parameters,
+- the sampler (ODE, or JSF)
+
 To run the simulations, use the following command:
 #+begin_src sh
   python3 run-simulations.py
 #+end_src
+
+* Inference
+To run the inference on some data, you first describe the data in a file, e.g., [[file:./sirs-data.ssv]]. 
+Then, you set the inference settings in the file [[file:./sirs-inference.toml]].
+
+To run the inference, use the following command:
+#+begin_src sh
+  python3 run-inference.py
+#+end_src
+
+* Plotting
+To plot the results, please use the code found in the folder [[file:../matlab-sirs]].
 
 * Environment
 
