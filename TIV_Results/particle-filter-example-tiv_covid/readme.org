@@ -1,4 +1,4 @@
-#+title: TIV example using =pypfilt=
+#+title: TEIVR example using =pypfilt=
 
 * Data
 

@@ -1,4 +1,4 @@
-#+title: SIS example using =pypfilt=
+#+title: SIRS example using =pypfilt=
 
 * Model
 
