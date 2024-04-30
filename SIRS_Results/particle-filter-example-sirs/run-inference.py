@@ -7,7 +7,7 @@ import pypfilt                  # type: ignore
 import matplotlib.pyplot as plt # type: ignore
 import matplotlib.image as mpimg # type: ignore
 import matplotlib as matplotlib # type: ignore
-matplotlib.use('QtAgg')
+# matplotlib.use('QtAgg')
 import pandas as pd
 import plotnine as p9
 from plotnine import ggplot, geom_rect, aes, geom_ribbon, geom_point, scale_y_log10, scale_x_continuous, labs, theme_bw, geom_vline
@@ -70,7 +70,6 @@ gammaEst.to_csv(f"{out_dir}/gammaEst.csv", index=False)
 omegaEst = pst_df[pst_df['name'] == 'omegaCoef']
 omegaEst.to_csv(f"{out_dir}/omegaEst.csv", index=False)
 
-
 ext_prdf = pd.DataFrame(fit_result.forecasts[forecast_time].tables['extinction_prob'])
 ext_prdf.to_csv(f"{out_dir}/ext_prdf.csv", index=False)
 
@@ -120,3 +119,19 @@ plt_df.to_csv(f"{out_dir}/plt_df.csv", index=False)
 state_p9 = state_plt_p9(plt_df, plt_df_obs)
 state_p9.save(f"{out_dir}/demo-state-trajectory.png",
                       height = 4.1, width = 5.8)
+
+
+# this is where we get a snapshot of the parameter distribution at the final time
+# and then write each of the estimated parameters to a separate csv file
+snpsht_df = pd.DataFrame(fit_result.estimation.tables['snapshot'])
+
+# input_csv = 'outputs4/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_6000/snpsht_df.csv'
+# out_dir = 'out/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_6000'
+
+params_df = snpsht_df
+final_time = forecast_time
+params_df = params_df[params_df["time"] == final_time]
+params_df = params_df[param_names]
+
+for i in range(len(param_names)):
+    (params_df[param_names[i]]).to_csv(out_dir + '/' + param_names[i]+'_distribution.csv', index=False)  

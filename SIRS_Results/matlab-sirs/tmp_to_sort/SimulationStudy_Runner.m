@@ -18,7 +18,6 @@ mDeath = 1/(85.0*365); %lifespan
 mBirth = mDeath;
 mWane = 1/(1.0*365);
 
-
 % These are the initial conditions
 N0 = 10^5;
 I0 = 2;
@@ -99,8 +98,8 @@ R0 = 0;
 
 
 % N0_Vector = [2:0.5:7];
-N0_Vector = [6.5];
-HowManySimsToDo = 1000;
+N0_Vector = [5];
+HowManySimsToDo = 5000;
 
 TimerData = [];
 dtObserve = 10^(-1);
@@ -108,7 +107,7 @@ TimeObserve = 0:dtObserve:tFinal;
 XObserve = zeros(3,length(TimeObserve));
 
 %%
-masterpath = 'FinalRuns/CPU_Time_plots';
+masterpath = 'FinalRuns';
 % mex_WriteMatrix([masterpath,'/JSF_T1_META.csv'],[] ,'%10.10f',',','w+');
 % clear mex_WriteMatrix;
 % 
@@ -125,13 +124,13 @@ masterpath = 'FinalRuns/CPU_Time_plots';
 % clear mex_WriteMatrix;
 
 for N0ii = N0_Vector
-    for ii=325:HowManySimsToDo
+    for ii=1:HowManySimsToDo
 %     for ii=1:HowManySimsToDo
         N0 = round(10^(N0ii));
         S0 = N0-I0-R0;
         X0 = [S0;I0;R0];
         
-%         rng(ii)
+        % rng(ii)
 %         tic;
 %         [XTau,TauArrTau] = TauLeapingMethod(X0, rates, stoich, solTimes, myOpts);
 %         TauTimer = toc;
@@ -193,48 +192,55 @@ for N0ii = N0_Vector
 %         
 %         
 %         
-%         myOpts.SwitchingThreshold = (10^5)*SwitchingThreshold;
-%         rng(ii)
-%         tic;
-%         [XJSF,TauArrJSG] = JumpSwitchFlowSimulator(X0, rates, stoich, solTimes, myOpts);
-%         JumpSwitchFlowTimer_T5 = toc;
-%         
-%         [UniqueT, UniqueIndecies] = unique(TauArrJSG);
-%         XObserve = zeros(3,length(TimeObserve));
-%         for jj=1:3
-%             UniqueX = XJSF(jj,UniqueIndecies);
-%             XObserve(jj,:) = interp1(UniqueT,UniqueX, TimeObserve,'previous');
-%         end
-%         mex_WriteMatrix([masterpath,'/JumpSwitchFlow/T5/JSF_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'],[TimeObserve' XObserve'],'%10.4f',',','w+');
-%         clear mex_WriteMatrix;
-%         
-%         mex_WriteMatrix([masterpath,'/JSF_T5_META.csv'],[N0ii ii JumpSwitchFlowTimer_T5],'%10.10f',',','a+');
-%         clear mex_WriteMatrix;
-        
-        
-        
-%         [N0ii ii JumpSwitchFlowTimer]
-
-        
-
+        myOpts.SwitchingThreshold = (10^3)*SwitchingThreshold;
         rng(ii)
         tic;
-        [XG,TauArrG] = GillespieDirectMethod(X0, rates, stoich, solTimes, myOpts);
-        GillespieTimer = toc;
-        
+        [XJSF,TauArrJSG] = JumpSwitchFlowSimulator(X0, rates, stoich, solTimes, myOpts);
+        JumpSwitchFlowTimer_T5 = toc;
 
-        [UniqueT, UniqueIndecies] = unique(TauArrG);
+        [UniqueT, UniqueIndecies] = unique(TauArrJSG);
         XObserve = zeros(3,length(TimeObserve));
         for jj=1:3
-            UniqueX = XG(jj,UniqueIndecies);
+            UniqueX = XJSF(jj,UniqueIndecies);
             XObserve(jj,:) = interp1(UniqueT,UniqueX, TimeObserve,'previous');
         end
-        mex_WriteMatrix([masterpath,'/Gillespie/GIL_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'],[TimeObserve' XObserve'],'%10.4f',',','w+');
-        clear mex_WriteMatrix;
+        JumpSwitchFlowTimer = toc;
+        % mex_WriteMatrix([masterpath,'/JumpSwitchFlow/T5/JSF_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'],[TimeObserve' XObserve'],'%10.4f',',','w+');
+        % clear mex_WriteMatrix;
+        mat_name = [masterpath,'/JSF_T3_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'];
+        mat = [TimeObserve' XObserve'];
+        writematrix(mat,mat_name)
 
-        mex_WriteMatrix([masterpath,'/GIL_META.csv'],[N0ii ii GillespieTimer],'%10.10f',',','a+');
-        clear mex_WriteMatrix;
-        [N0ii ii GillespieTimer]
+        % mex_WriteMatrix([masterpath,'/JSF_T5_META.csv'],[N0ii ii JumpSwitchFlowTimer_T5],'%10.10f',',','a+');
+        % clear mex_WriteMatrix;
+        
+        
+        
+        [N0ii ii JumpSwitchFlowTimer]
+
+        
+
+        % rng(ii)
+        % tic;
+        % [XG,TauArrG] = GillespieDirectMethod(X0, rates, stoich, solTimes, myOpts);
+        % GillespieTimer = toc;
+        % 
+        % 
+        % [UniqueT, UniqueIndecies] = unique(TauArrG);
+        % XObserve = zeros(3,length(TimeObserve));
+        % for jj=1:3
+        %     UniqueX = XG(jj,UniqueIndecies);
+        %     XObserve(jj,:) = interp1(UniqueT,UniqueX, TimeObserve,'previous');
+        % end
+        % % mex_WriteMatrix([masterpath,'/Gillespie/GIL_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'],[TimeObserve' XObserve'],'%10.4f',',','w+');
+        % % clear mex_WriteMatrix;
+        % mat_name = [masterpath,'/GIL_N0Index_', num2str(N0ii) , '_iiSeed_', num2str(ii) ,'.csv'];
+        % mat = [TimeObserve' XObserve'];
+        % writematrix(mat,mat_name)
+        % 
+        % % mex_WriteMatrix([masterpath,'/GIL_META.csv'],[N0ii ii GillespieTimer],'%10.10f',',','a+');
+        % % clear mex_WriteMatrix;
+        % [N0ii ii GillespieTimer]
         
 %         [N0ii ii TauTimer JumpSwitchFlowTimer_T1 JumpSwitchFlowTimer_T3 JumpSwitchFlowTimer_T5 GillespieTimer]
 %         [N0ii ii TauTimer JumpSwitchFlowTimer_T1 JumpSwitchFlowTimer_T3 JumpSwitchFlowTimer_T5]

@@ -145,8 +145,8 @@ class RefractoryCellModel_JSF(Model):
             print('time = ', time_step.start, ' partile = ', p_ix, end='\r')
 
             # check if any of the xs are nans at the end of the simulation
-            if (np.isnan(xs[0][-1]) or np.isnan(xs[1][-1]) or np.isnan(xs[2][-1]) or np.isnan(xs[3][-1]) or np.isnan(xs[4][-1])):
-                pdb.set_trace()
+            # if (np.isnan(xs[0][-1]) or np.isnan(xs[1][-1]) or np.isnan(xs[2][-1]) or np.isnan(xs[3][-1]) or np.isnan(xs[4][-1])):
+            #     pdb.set_trace()
             
             # print('time = ', time_step.start, ' partile = ', p_ix)
             

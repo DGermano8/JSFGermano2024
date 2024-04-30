@@ -28,7 +28,7 @@ for ii in range(0, len(patient_list)):
         inst = list(pypfilt.load_instances("config/cli-refractory-tiv-jsf.toml"))[0]
         patient_id = '/' + patient_list[ii]
 
-        out_dir = 'outputs2/' + patient_id + '/' +  inst.settings['components']['model'] + '_' + str(inst.settings['filter']['particles'])
+        out_dir = 'outputs4/' + patient_id + '/' +  inst.settings['components']['model'] + '_' + str(inst.settings['filter']['particles'])
         cli_args = {'obs_ssv': 'data/' + patient_id + '.ssv'}
 
         inst.settings['observations']['V']['file'] = 'data/' + patient_id + '.ssv'
@@ -43,7 +43,7 @@ for ii in range(0, len(patient_list)):
         mrgs = {p : prior[p]
                     for p in param_names if has_prior(p) }
 
-        forecast_time = 4
+        forecast_time = 10
 
         with open(f"{out_dir}/fit_result.pkl", "rb") as file_to_unpickle:
             fit_result = pickle.load(file_to_unpickle)
@@ -103,7 +103,7 @@ for ii in range(0, len(patient_list)):
 
         # cli_args = {'obs_ssv': 'data/patient-1-censored.ssv'}
         pst_state_df = inf_results['posterior_state_df']
-        pdb.set_trace()
+        # pdb.set_trace()
 
         state_df = pd.concat([pst_state_df, prd_state_df])
 

@@ -10,15 +10,14 @@ import pdb
 
 patient_list = ['432192', '443108', '444332', '444391', '445602', '451152']
 
-# for ii in range(0, len(patient_list)):
-for ii in range(0, 1):
+for ii in range(0, len(patient_list)):
 
     # Put all the input/output files here so that they are easy to find
     # and change later.
     input_est = "ke2022daily.json"
 
-    input_csv = 'outputs/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_4000/snpsht_df.csv'
-    out_dir = 'out/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_4000'
+    input_csv = 'outputs4/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_6000/snpsht_df.csv'
+    out_dir = 'out/' + patient_list[ii] + '/src.tiv.RefractoryCellModel_JSF_6000'
 
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
@@ -43,7 +42,7 @@ for ii in range(0, 1):
     with open(input_est) as file:
         ke2022daily_estimates = json.load(file)
         ke2022daily_df = pd.DataFrame(
-            {var: [val] for var, val in ke2022daily_estimates["451152"].items()}
+            {var: [val] for var, val in ke2022daily_estimates[patient_list[ii]].items()}
         )
 
 

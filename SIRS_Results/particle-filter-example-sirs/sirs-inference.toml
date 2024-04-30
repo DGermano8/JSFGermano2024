@@ -11,8 +11,8 @@ summary = "pypfilt.summary.HDF5"
 
 [time]
 start = 0.0
-until = 400.0
-steps_per_unit = 100
+until = 110.0
+steps_per_unit = 1
 summaries_per_unit = 1
 
 [observations.I]
@@ -29,8 +29,8 @@ intervention_time = { name = "constant", args.value = 100.0 }
 intervention_magnitude = { name = "constant", args.value = 1.0}
 
 [scenario.inference]
-components.model = "sirs_model.SIRS_ODE"
-# components.model = "sirs_model.SIRS_JSF"
+# components.model = "sirs_model.SIRS_ODE"
+components.model = "sirs_model.SIRS_JSF"
 observations.I.file = "outputs/sim_df.ssv"
 
 prior.I = { name = "constant", args.value = 2.0 }
@@ -56,6 +56,8 @@ summary.tables.forecasts.component = "pypfilt.summary.PredictiveCIs"
 summary.tables.forecasts.credible_intervals = [ 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 95 ]
 
 summary.tables.extinction_prob.component = "sirs_model.PrExtinction"
+
+summary.tables.snapshot.component = "pypfilt.summary.EnsembleSnapshot"
 
 # backcast_time = 60
 

@@ -1,18 +1,18 @@
 patient_list = ['432192'; '443108'; '444332';'444391';'445602';'451152'];
 
-patient = patient_list(6,:);
+patient = patient_list(1,:);
 
-master_path = ['Data/',patient,'/src.tiv.RefractoryCellModel_JSF_2000/'];
+master_path = ['Data/6000/',patient,'/src.tiv.RefractoryCellModel_JSF_6000/'];
 % master_path = 'sirs_model.SIRS_JSF_particle=6000_intMag=0.875/';
 % master_path = 'sirs_model.SIRS_JSF_particle=6000_intMag=0.75/';
 
 raw_data = readmatrix(['PatientData/CSVs/',patient,'.csv']);
-ci_data =  readmatrix([master_path,'plt_df.csv']);
+ci_data =  readmatrix([master_path,'V_plt_df.csv']);
 
 ext_data = readmatrix([master_path,'ext_prdf.csv']);
 
-fc_time = 14;
-int_time = 14;
+fc_time = 10;
+int_time = 10;
 plot_time = 20;
 
 ext_data(fc_time,:) = [];
@@ -56,7 +56,7 @@ FC_CI_time = CI_time(:,(fc_time+2):end);
 f=figure;
 % subplot(2,1,1)
 
-title(patient)
+title(['Patient ID ',patient],'fontsize',16,'Interpreter','latex')
 
 JSF_colour = 1/255*[131, 96, 150];
 Tau_colour = 1/255*[237, 123, 123];
@@ -70,14 +70,23 @@ hold on;
 yyaxis left
 
 for jj = [1:2:length(CI_val)]
-    ciplot(BC_CI_min_ii(jj,:),BC_CI_max_ii(jj,:),BC_CI_time(jj,:),Tau_colour,1.0*jj/length(CI_val))
+    if jj== length(CI_val)
+        plot(BC_CI_time(jj,:), BC_CI_max_ii(jj,:),'-','linewidth',1.5,'color', Tau_colour)
+    else 
+        ciplot(BC_CI_min_ii(jj,:),BC_CI_max_ii(jj,:),BC_CI_time(jj,:),Tau_colour,1.0*jj/length(CI_val))
+    end
 end
 for jj = [1:2:length(CI_val)]
-    ciplot(FC_CI_min_ii(jj,:),FC_CI_max_ii(jj,:),FC_CI_time(jj,:),JSF_colour,1.0*jj/length(CI_val))
+    if jj== length(CI_val)
+        plot(FC_CI_time(jj,:), FC_CI_max_ii(jj,:),'-','linewidth',2,'color', JSF_colour)
+    else 
+        ciplot(FC_CI_min_ii(jj,:),FC_CI_max_ii(jj,:),FC_CI_time(jj,:),JSF_colour,1.0*jj/length(CI_val))
+    end
+    
 end
 
-xlabel('Time (days)','fontsize',14,'Interpreter','latex')
-ylabel('Viral Load','fontsize',14,'Interpreter','latex')
+xlabel('Time (days)','fontsize',16,'Interpreter','latex')
+ylabel('Viral Load','fontsize',16,'Interpreter','latex')
 % axis([0 14 10^(-1) 1.05*max([max([FC_CI_max_ii BC_CI_max_ii]) 10.^V_data'])])
 axis([0 plot_time 10^(-1) 10^(9)])
 
@@ -87,28 +96,37 @@ xticks([0 5 10 15 20])
 ax = gca;
 ax.YAxis(1).Scale ="log";
 
-scatter(time(time<=fc_time),10.^(V_data(time<=fc_time)),50,'ko','filled')
-scatter(time(time>fc_time),10.^(V_data(time>fc_time)),50,'ko')
-plot([-1 plot_time],[10^(-0.65) 10^(-0.65)],'--','linewidth',2.5,'color',[0.5 0.5 0.5])
+scatter(time,10.^(V_data),50,'ko','filled')
+% scatter(time(time<=fc_time),10.^(V_data(time<=fc_time)),50,'ko','filled')
+% scatter(time(time>=fc_time),10.^(V_data(time>=fc_time)),50,'ko','filled')
+% scatter(time(time>=fc_time),10.^(V_data(time>=fc_time)),20,'wo','filled')
+
+plot([-1 plot_time],[10^(-0.65) 10^(-0.65)],':','linewidth',2.5,'color',[0.5 0.5 0.5])
+plot([-1 plot_time],[10^(2) 10^(2)],'--','linewidth',2.5,'color',[0.5 0.5 0.5])
 
 % plot_darkmode
 hold off
-
-yyaxis right
 hold on
+yyaxis right
+
 % plot(ext_data((ext_data(1:fc_time,1) >= 0),1),ext_data((ext_data(1:fc_time,1) >= 0),2),'-','linewidth',2.5,'color',myblue_colour)
 plot(ext_data(1:fc_time,1),ext_data(1:fc_time,2),'-','linewidth',2.5,'color',myblue_colour)
-plot(ext_data(fc_time:end,1),ext_data(fc_time:end,2),'--','linewidth',2.5,'color',myblue_colour)
+plot(ext_data(fc_time:end,1),ext_data(fc_time:end,2),'-','linewidth',2.5,'color',myblue_colour)
 axis([0 plot_time -0.02 1.02])
-ylabel('Probability of Viral Clearance','fontsize',14,'Interpreter','latex')
+ylabel('Probability of Viral Clearance','fontsize',16,'Interpreter','latex')
 % xlabel('time (days)')
+yticks([0 0.25 0.5 0.75 1])
 
-plot([int_time int_time],[-1 10^5],':','linewidth',2.5,'color','black')
+% plot([int_time int_time],[-1 10^5],':','linewidth',2.5,'color','black')
 % plot_darkmode
 hold off
-% legend({'Inference 95\% CI', 'Inference 75\% CI','Inference 50\% CI', 'Inference 25\% CI', 'Inference 0\% CI',...
-%     'Prediction 95\% CI','Prediction 75\% CI','Prediction 50\% CI', 'Prediction 25\% CI', 'Prediction 0\% CI',...
-%     'Inference data','Future data', 'Probability of fade-out','Prediction start'},...
+
+% legend({'Inference 95\% CI', 'Inference 75\% CI','Inference 50\% CI', 'Inference 25\% CI', 'Inference mean',...
+%     'Prediction 95\% CI','Prediction 75\% CI','Prediction 50\% CI', 'Prediction 25\% CI', 'Prediction mean',...
+%     'Viral Load data','Limit of detection', 'JSF threshold, $\Omega = 10^2$','Viral clearance probability'},...
 %     'Location','northeast','NumColumns',3,'fontsize',12,'Interpreter','latex')
 
-f.Position = [391   324   303   217];
+% f.Position = [420   324   303   217];
+% f.Position = [420   324   350   280];
+f.Position = [420   324   320   240];
+exportgraphics(gca,['figs/',patient,'.pdf'],'Resolution',200)

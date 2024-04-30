@@ -7,26 +7,30 @@
 Here are the reactant and products as needed by the hybrid model and
 the flows as needed by the CTMC model.
 
-|             | *Reactants* |     | *Products* |     | *Flow* |     |
-|-------------+-------------+-----+------------+-----+--------+-----|
-| *Rate*      |         $S$ | $I$ |        $S$ | $I$ |    $S$ | $I$ |
-|-------------+-------------+-----+------------+-----+--------+-----|
-| $\beta / N$ |           1 |   1 |          0 |   2 |     -1 |   1 |
-| $\gamma$    |           0 |   1 |          1 |   0 |      1 |  -1 |
+|             | *Reactants* |     |    | *Products*  |     |    |   |*Flow* |     |
+|-------------+-------------+-----+----+-------------+-----+----+-------------+-----+----|
+| *Rate*      |         $S$ | $I$ | $R$|         $S$ | $I$ | $R$|         $S$ | $I$ | $R$|
+|-------------+-------------+-----+----+-------------+-----+----+-------------+-----+----|
+| $\kappa$    |           1 |   . |  . |           2 |   . |  . |           1 |   . |  . |
+| $\kappa$    |           . |   1 |  . |           1 |   1 |  . |           1 |   . |  . |
+| $\kappa$    |           . |   . |  1 |           1 |   . |  1 |           1 |   . |  . |
+| $\beta/N$   |           1 |   1 |  . |           . |   2 |  1 |          -1 |   1 |  . |
+| $\gamma$    |           . |   1 |  . |           . |   . |  1 |           . |  -1 |  1 |
+| $\omega$    |           . |   . |  1 |           1 |   . |  . |           1 |   . | -1 |
+| $\mu$       |           1 |   . |  . |           . |   . |  . |          -1 |   . |  . |
+| $\mu$       |           . |   1 |  . |           . |   . |  . |           . |  -1 |  . |
+| $\mu$       |           . |   . |  1 |           . |   . |  . |           . |   . | -1 |
 
 ** Differential equations
 
 Here are the differential equations used by the ODE model:
 
-\[
-\frac{dS}{dt} = -\beta SI / N + \gamma I
-\]
+$\frac{dS}{dt} = -\beta SI / N - \mu S + \kappa (S + I + R) + \omegaR$
 
-and
+$\frac{dI}{dt} = +\beta SI / N - \gamma I - \mu I $
 
-\[
-\frac{dI}{dt} = \beta SI / N - \gamma I
-\]
+$\frac{dI}{dt} = +\gamma I - \mu R - \omega R $
+
 
 * Simulations
 

@@ -5,7 +5,7 @@ import pypfilt
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib as matplotlib
-matplotlib.use('QtAgg')
+# matplotlib.use('QtAgg') 
 import pandas as pd
 import plotnine as p9
 from plotnine import *

@@ -2,7 +2,7 @@ contourpy==1.1.0
 cycler==0.11.0
 fonttools==4.41.1
 h5py==3.9.0
-jsf @ file:///Users/domenicgermano/Desktop/SIR_RA_LIT/Code/jsf_pck
+jsf==0.1
 kiwisolver==1.4.4
 lhs==0.4.1
 matplotlib==3.7.2
@@ -15,9 +15,9 @@ Pillow==10.0.0
 plotnine==0.12.2
 pyparsing==3.0.9
 pypfilt==0.8.0
-PyQt5==5.15.9
-PyQt5-Qt5==5.15.2
-PyQt5-sip==12.12.2
+# PyQt5==5.15.9
+# PyQt5-Qt5==5.15.2
+# PyQt5-sip==12.12.2
 python-dateutil==2.8.2
 pytz==2023.3
 scipy==1.11.1

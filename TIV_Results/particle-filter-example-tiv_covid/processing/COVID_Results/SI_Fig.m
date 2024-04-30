@@ -2,7 +2,7 @@
 patient_list = ['432192'; '443108'; '444332';'444391';'445602';'451152'];
 
 patient = patient_list(5,:);
-master_path = ['Data/',patient,'/src.tiv.RefractoryCellModel_JSF_2000/'];
+master_path = ['Data/6000/',patient,'/src.tiv.RefractoryCellModel_JSF_6000/'];
 
 beta_ci_data =  readmatrix([master_path,'betaEst.csv']);
 delta_ci_data =  readmatrix([master_path,'deltaEst.csv']);

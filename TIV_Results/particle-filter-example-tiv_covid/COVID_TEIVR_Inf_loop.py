@@ -16,6 +16,8 @@ from src.inf import plottable_model_cis, param_plt_p9, state_plt_p9, tiv_run_inf
 import os
 import random
 import pickle
+import multiprocessing
+import multiprocessing
 
 
 # set random seed
@@ -23,12 +25,13 @@ random.seed(1)
 
 patient_list = ['432192', '443108', '444332', '444391', '445602', '451152']
 
-for ii in range(0, len(patient_list)):
+def process_patient(ii):
     try:
+        # Your existing code here
         inst = list(pypfilt.load_instances("config/cli-refractory-tiv-jsf.toml"))[0]
         patient_id = '/' + patient_list[ii]
 
-        out_dir = 'outputs2/' + patient_id + '/' +  inst.settings['components']['model'] + '_' + str(inst.settings['filter']['particles'])
+        out_dir = 'outputs4/' + patient_id + '/' +  inst.settings['components']['model'] + '_' + str(inst.settings['filter']['particles'])
         cli_args = {'obs_ssv': 'data/' + patient_id + '.ssv'}
 
         # make output directory if it doesn't exist
@@ -47,7 +50,7 @@ for ii in range(0, len(patient_list)):
         mrgs = {p : prior[p]
                     for p in param_names if has_prior(p) }
 
-        forecast_time = 15
+        forecast_time = 10
 
         fit_result = pypfilt.forecast(inf_ctx, [forecast_time], filename=None)
 
@@ -57,4 +60,14 @@ for ii in range(0, len(patient_list)):
     except Exception as e:
         print(e)
         print('Error')
+
+if __name__ == '__main__':
+    num_cores = 3  # Specify the number of cores to use
+
+    pool = multiprocessing.Pool(processes=num_cores)
+    pool.map(process_patient, range(0, len(patient_list)))
+    pool.close()
+    pool.join()
+
+
     
