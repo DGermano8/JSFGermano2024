@@ -2,4 +2,9 @@
 This is the code repo to accompany the original JSF paper
 
 
-The code found in the directory `SimpleODEModel'
+The code found in the directory `SimpleODEModel' is used to describe a simple Lotka-Volterra model. This illistrates how JSF can be used in a simple system, and demonstrates the basic principles of JSF.
+
+The code found in the directory `SIRS_Results' performs the simulation study of the SIRS model of the paper, and demonstrates how JSF can be used to study a more complex system. Specifically, we show how JSF is computaionally more efficient than the gold standard Doob-Gillespie algorithm, and also fixed step Tao-leaping algorithm.
+We then show how JSF can be couple with pypfilt, a particle filter library, to perform parameter estimation on the SIRS model. This demonstrates how JSF can be used to perform inference on a complex system.
+
+The code found in the directory `TIV_Results' performs the analysis on the TEIVR model to estimate the model parameters. Here, we estimate viral reproduction number, and also estimate the probability of viral clearance for each patient. 
