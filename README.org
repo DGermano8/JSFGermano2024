@@ -7,5 +7,5 @@ The code found in the directory `SimpleODEModel' is used to describe a simple Lo
 The code found in the directory `SIRS_Results' performs the simulation study of the SIRS model of the paper, and demonstrates how JSF can be used to study a more complex system. Specifically, we show how JSF is computaionally more efficient than the gold standard Doob-Gillespie algorithm, and also fixed step Tao-leaping algorithm.
 We then show how JSF can be couple with pypfilt, a particle filter library, to perform parameter estimation on the SIRS model. This demonstrates how JSF can be used to perform inference on a complex system.
 
-The code found in the directory `TEIVR_Results' performs the analysis on the TEIVR model to estimate the model parameters. Here, we estimate viral reproduction number, and also estimate the probability of viral clearance for each patient.
+The code found in the directory [[file:./TEIVR_Results/particle-filter-example-tiv_covid/readme.org][=TEIVR_Results=]] performs the analysis on the TEIVR model to estimate the model parameters. Here, we estimate viral reproduction number, and also estimate the probability of viral clearance for each patient.
 The directory `map-compute-demo' performs the R_0 estimates from the inference study.
