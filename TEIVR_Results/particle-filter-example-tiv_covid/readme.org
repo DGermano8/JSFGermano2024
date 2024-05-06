@@ -44,6 +44,9 @@ $\frac{dV}{dt} = \pi I - c V$,
 
 $\frac{dR}{dt} = \Phi I T - \rho R$.
 
+** TODO Observation model
+
+*TODO* Fill this section in with detail of the observation model.
 
 * Simulation and Inference
 
@@ -67,9 +70,11 @@ Look in the output directory for the results.
 * Environment
 
 The [[file:./requirements.txt][requirements.txt]] file contains a description of the packages (and
-versions) needed to run this.
+versions) needed to run this. You can use this the requirements file to construct a virtual environment with the required packages.
 
 ** Setting up the environment
+
+*YOU MUST INSTALL A LOCAL COPY OF JSF FOR THIS TO WORK*
 
 Use the following to set up a virtual environment.
 
@@ -80,53 +85,41 @@ Use the following to set up a virtual environment.
   pip install -r requirements.txt
 #+end_src
 
-
-
-
-
 TODO - Explain how to install a local copy of jsf by cloning the package from GitHub.
 
 TODO - Explain that you need to run the COVID.*py script to run the actual compute.
 
 TODO - Explain that the figure generation is done by the .m scripts in the =processing/= directory.
 
-
-
-
-
-and to check I am not making any obvious errors, this is how we can
-use =mypy=.
+To type-check the code, and confirm I am not making any wildly obvious errors, this is how we can use =mypy=:
 
 #+begin_src sh
   mypy run-inf-cli.py run-inference-from-simulation.py src/inf.py
 #+end_src
 
-
-YOU MUST INSTALL A LOCAL COPY OF JSF FOR THIS TO WORK
-
 --------------------------------------------------------------------------------
-* TO RUN THE INFERENCE
---------------------------------------------------------------------------------
-The model is written in the file src/tiv.py. Here, the model is defined as a
-jsf method. 
+* Running the inference computations
+
+The model is written in [[file:./src/tiv.py]]. The model is defined as a =jsf= method. 
+
 - threshold parameter, \Omega, is set here: threshold = 100
-- Stoichiometric matricies are defined here as: _nu_reactants and _nu_products
+- Stoichiometric matricies are defined in the attributes =_nu_reactants= and =_nu_products=
 - the propensity functions are contained in _rates(self, x, theta, time)
 - in update, _my_opts defines 'EnforceDo', the time step, 'dt', and the switch
   between the CTMC and ODE models for each state variable, as 'SwitchingThreshold'
 
 
-The inference is run using the file COVID_TIV_Inf.py.
-Here, each patient is analysed independently. The data is read in from the files
-stored in the data folder.
+The inference is run using the file COVID_TIV_Inf.py. 
+Each patient is analysed independently.
+The data is read in from the files stored in the data folder.
 
-The configuration file is read in from the file cli-refractory-tiv-jsf.toml.
+The use of the particle filter is configured by the file [[file:./config/cli-refractory-tiv-jsf.toml]].
 This file contains the following information:
 - the number of particles to use in the particle filter
 - the number of iterations to run the particle filter for
 - the state parameters initial values
 - the prior distributions for the parameters
-- the observation model
+- the *observation model*
 
 --------------------------------------------------------------------------------
 * TO GENERATE THE FIGURES
