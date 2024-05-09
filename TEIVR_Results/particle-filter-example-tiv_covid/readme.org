@@ -44,9 +44,11 @@ $\frac{dV}{dt} = \pi I - c V$,
 
 $\frac{dR}{dt} = \Phi I T - \rho R$.
 
-** TODO Observation model
+** Observation model
 
-*TODO* Fill this section in with detail of the observation model.
+We assume that the observed viral load is has measurements which follow a (truncated) normal distributed with a mean equal to the (base-10) logarithm of $V$ and unit variance.
+We assume that there is a threshold below which we cannot measure the virus.
+Specifically, the detection threshold is such that if the $\log_{10}(V) < -0.65$, then we assume that the virus cannot be detected and in this case the observed value clips to the threshold.
 
 * Simulation and Inference
 
