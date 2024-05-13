@@ -8,7 +8,7 @@ The data is sourced from the following paper:
 
 Specifically, we use patients 432192, 443108, 444332, 444391, 445602, and 451152.
 
-The processed data is stored in the =data= directory.
+The preprocessed (copy number) data is stored in the =data= directory.
 
 * Model
 
@@ -44,9 +44,10 @@ $\frac{dV}{dt} = \pi I - c V$,
 
 $\frac{dR}{dt} = \Phi I T - \rho R$.
 
-** TODO Observation model
+** Observation model
 
-*TODO* Fill this section in with detail of the observation model.
+The data has been preprocessed via the transformation \(\log_{10}V = 11.35 - 0.25 \text{CN}\) (from Ke /et al/) to be in units of \(\log_{10}V\).
+In our observation model, we assume that the measurements of \(\log_{10}V\) have Gaussian noise with unit variance and the values are tuncated below \(-0.65\).
 
 * Simulation and Inference
 
