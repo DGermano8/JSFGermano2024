@@ -90,7 +90,7 @@ dtau = 0.01
 shift_pop = 3
 # max popsize is 10^(pop_it + shift_pop - 1)
 # min popsize is 10^(shift_pop)
-pop_it = 6
+pop_it = 4
 runs = 3
 
 # gather cpu summary statistics
@@ -184,7 +184,7 @@ fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
 # plot the results with scatter plot
 axs[0].scatter([pow(10, i+shift_pop) for i in range(pop_it)], jsf_avg, label="JSF")
-# axs[0].scatter([pow(10, i+shift_pop) for i in range(pop_it)], gillespie_avg, label="Gillespie")
+axs[0].scatter([pow(10, i+shift_pop) for i in range(pop_it)], gillespie_avg, label="Gillespie")
 axs[0].scatter([pow(10, i+shift_pop) for i in range(pop_it)], tau_avg, label="Tau")
 axs[0].set_xlabel("Population Size")
 axs[0].set_ylabel("Average CPU Time")
