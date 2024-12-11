@@ -84,14 +84,14 @@ my_opts = {
             "SwitchingThreshold": [pow(10,switch_th), pow(10,switch_th), pow(10,switch_th)]
            }
 
-dtau = 0.005
+dtau = 0.01
 
 # track the CPU time for each method
 shift_pop = 3
 # max popsize is 10^(pop_it + shift_pop - 1)
 # min popsize is 10^(shift_pop)
-pop_it = 9
-runs = 100
+pop_it = 6
+runs = 3
 
 # gather cpu summary statistics
 jsf_times = [[0 for _ in range(runs)] for _ in range(pop_it)]
@@ -120,7 +120,7 @@ tau_fade = [0 for _ in range(pop_it)]
 
 
 for pop_size in range(0, pop_it):
-    S0 = 1*pow(10, 0.5*pop_size+shift_pop)
+    S0 = 1*pow(10, pop_size+shift_pop)
     I0 = 2
     R0 = 0
     x0 = [S0, I0, R0]
@@ -135,11 +135,10 @@ for pop_size in range(0, pop_it):
         finish_jsf = time.process_time()
         jsf_times[i] = (finish_jsf - start_jsf)
 
-        if pop_size+shift_pop < 6:
-            start_gillespie = time.process_time()
-            sim_gil = gillespie_direct_method(x0, rates, stoich, [0, t_max], options=None)
-            finish_gillespie = time.process_time()
-            gillespie_times[i] = (finish_gillespie - start_gillespie)
+        start_gillespie = time.process_time()
+        sim_gil = gillespie_direct_method(x0, rates, stoich, [0, t_max], options=None)
+        finish_gillespie = time.process_time()
+        gillespie_times[i] = (finish_gillespie - start_gillespie)
 
         start_tau = time.process_time()
         sim_tau = tau_leaping_method(x0, rates, stoich, [0, t_max], options={"dt": dtau})
@@ -149,17 +148,15 @@ for pop_size in range(0, pop_it):
         # track the trajectory statistics
         # find the time in sim_===[1] closest to t=50
         jsf_time_index = min(range(len(sim_jsf[1])), key=lambda i: abs(sim_jsf[1][i] - 50))
-        if pop_size+shift_pop < 6:
-            gil_time_index = min(range(len(sim_gil[1])), key=lambda i: abs(sim_gil[1][i] - 50))
+        gil_time_index = min(range(len(sim_gil[1])), key=lambda i: abs(sim_gil[1][i] - 50))
         tau_time_index = min(range(len(sim_tau[1])), key=lambda i: abs(sim_tau[1][i] - 50))
 
 
         jsf_ext_i[i] = (sim_jsf[0][1][jsf_time_index] == 0)
         jsf_fade_i[i] = (sim_jsf[0][1][-1] == 0)*(sim_jsf[0][1][jsf_time_index] != 0)
 
-        if pop_size+shift_pop < 6:
-            gillespie_ext_i[i] = (sim_gil[0][1][gil_time_index] == 0)
-            gillespie_fade_i[i] = (sim_gil[0][1][-1] == 0)*(sim_gil[0][1][gil_time_index] != 0)
+        gillespie_ext_i[i] = (sim_gil[0][1][gil_time_index] == 0)
+        gillespie_fade_i[i] = (sim_gil[0][1][-1] == 0)*(sim_gil[0][1][gil_time_index] != 0)
 
         tau_ext_i[i] = (sim_tau[0][1][tau_time_index] == 0)
         tau_fade_i[i] = (sim_tau[0][1][-1] == 0)*(sim_tau[0][1][tau_time_index] != 0)
@@ -228,29 +225,25 @@ plt.show()
 
 
 # Plot the results using subplots
-# fig, axs = plt.subplots(3, 1, figsize=(10, 8))
+fig, axs = plt.subplots(3, 1, figsize=(10, 8))
+axs[0].plot(sim_jsf[1], sim_jsf[0][0], label="S_JSf")
+axs[0].plot(sim_gil[1], sim_gil[0][0], label="S_Gil")
+axs[0].plot(sim_tau[1], sim_tau[0][0], label="S_Tau")
+axs[0].set_ylabel("Susceptible")
+axs[0].legend()
 
-# axs[0].plot(sim_jsf[1], sim_jsf[0][0], label="S_JSf")
-# axs[0].plot(sim_gil[1], sim_gil[0][0], label="S_Gil")
-# axs[0].plot(sim_tau[1], sim_tau[0][0], label="S_Tau")
-# axs[0].set_ylabel("Susceptible")
-# axs[0].legend()
+axs[1].plot(sim_jsf[1], sim_jsf[0][1], label="I_JSf")
+axs[1].plot(sim_gil[1], sim_gil[0][1], label="I_Gil")
+axs[1].plot(sim_tau[1], sim_tau[0][1], label="I_Tau")
+axs[1].set_ylabel("Infected")
+axs[1].legend()
 
-# axs[1].plot(sim_jsf[1], sim_jsf[0][1], label="I_JSf")
-# axs[1].plot(sim_gil[1], sim_gil[0][1], label="I_Gil")
-# axs[1].plot(sim_tau[1], sim_tau[0][1], label="I_Tau")
-# axs[1].set_ylabel("Infected")
-# axs[1].legend()
+axs[2].plot(sim_jsf[1], sim_jsf[0][2], label="R_JSf")
+axs[2].plot(sim_gil[1], sim_gil[0][2], label="R_Gil")
+axs[2].plot(sim_tau[1], sim_tau[0][2], label="R_Tau")
+axs[2].set_xlabel("Time")
+axs[2].set_ylabel("Recovered")
+axs[2].legend()
 
-# axs[2].plot(sim_jsf[1], sim_jsf[0][2], label="R_JSf")
-# axs[2].plot(sim_gil[1], sim_gil[0][2], label="R_Gil")
-# axs[2].plot(sim_tau[1], sim_tau[0][2], label="R_Tau")
-# axs[2].set_xlabel("Time")
-# axs[2].set_ylabel("Recovered")
-# axs[2].legend()
-
-# plt.tight_layout()
-# plt.show()
-
-
-
+plt.tight_layout()
+plt.show()
