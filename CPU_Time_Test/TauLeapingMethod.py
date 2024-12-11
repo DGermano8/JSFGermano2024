@@ -1,5 +1,6 @@
 import random
 import math
+import numpy as np
 
 def tau_leaping_method(x0, rates, stoich, times, options=None):
     """
@@ -41,7 +42,8 @@ def tau_leaping_method(x0, rates, stoich, times, options=None):
         props = [max(0, p) for p in props]  # Ensure no negative propensities
         
         # Generate Poisson variates
-        Y = [poisson(p * tau) if p > 0 else 0 for p in props]
+        # Y = [poisson(p * tau) if p > 0 else 0 for p in props]
+        Y = [np.random.poisson(p * tau) if p > 0 else 0 for p in props]
         
         # Update copy numbers
         for j in range(len(X0)):
@@ -53,12 +55,12 @@ def tau_leaping_method(x0, rates, stoich, times, options=None):
     return Z, t
 
 
-def poisson(lmbda):
-    """Generate a Poisson random variable."""
-    L = math.exp(-lmbda)
-    k = 0
-    p = 1
-    while p > L:
-        k += 1
-        p *= random.uniform(0, 1)
-    return k - 1
+# def poisson(lmbda):
+#     """Generate a Poisson random variable."""
+#     L = math.exp(-lmbda)
+#     k = 0
+#     p = 1
+#     while p > L:
+#         k += 1
+#         p *= random.uniform(0, 1)
+#     return k - 1
