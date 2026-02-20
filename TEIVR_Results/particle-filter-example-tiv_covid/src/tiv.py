@@ -304,8 +304,12 @@ class Gaussian(Univariate):
         my_y_vals = np.zeros_like(snapshot.state_vec[self.unit])
         # my_y_vals[zero_mask] = -np.inf
         my_y_vals[np.logical_not(zero_mask)] = np.log10(snapshot.state_vec[self.unit][np.logical_not(zero_mask)])
-        my_y_vals[my_y_vals <= self.limitOfDetection ] = self.limitOfDetection
-        
+        # NOTE For the zeros, we need to give them a value that
+        # indicates log10(0) in some way. We use -324 because in
+        # python it is true that (1e-323 > 0) but (1e-324 > 0)
+        # evaluates to false. Since we are only computing quantiles,
+        # this won't change the numerical values obtained.
+        my_y_vals[zero_mask] = -324
         my_weighted_sample = smws.DescrStatsW(my_y_vals, weights = snapshot.weights)
         
         # my_y_vals[np.logical_not(zero_mask)] = (snapshot.state_vec[self.unit][np.logical_not(zero_mask)])
