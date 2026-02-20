@@ -70,21 +70,21 @@ class RefractoryCellModel_JSF(Model):
         """
         """
         return [
-            ('lnV0', np.float_),
-            ('beta', np.float_),
-            ('phi', np.float_),
-            ('rho', np.float_),
-            ('k', np.float_),
-            ('delta', np.float_),
-            ('pi', np.float_),
-            ('c', np.float_),
-            ('T', np.float_),
-            ('E', np.float_),
-            ('I', np.float_),
-            ('R', np.float_),
-            ('V', np.float_),
+            ('lnV0', np.float64),
+            ('beta', np.float64),
+            ('phi', np.float64),
+            ('rho', np.float64),
+            ('k', np.float64),
+            ('delta', np.float64),
+            ('pi', np.float64),
+            ('c', np.float64),
+            ('T', np.float64),
+            ('E', np.float64),
+            ('I', np.float64),
+            ('R', np.float64),
+            ('V', np.float64),
             ('next_event', np.int_),
-            ('next_time', np.float_),
+            ('next_time', np.float64),
         ]
     def init(self, ctx, vec):
         """
