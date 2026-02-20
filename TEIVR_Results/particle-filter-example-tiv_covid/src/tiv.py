@@ -131,14 +131,25 @@ class RefractoryCellModel_JSF(Model):
                 ptcl['c'],
             ]
 
-            # pdb.set_trace()
-            xs, ts = JSF.JumpSwitchFlowSimulator(
+            # -------------------------------------------------------
+            # NOTE because the return type of JumpSwitchFlowSimulator
+            # changed between versions, we need to unpack the values
+            # in a safe way.
+            jsf_sim_result = JSF.JumpSwitchFlowSimulator(
                 x0,
                 lambda x, time: self._rates(x, theta, time),
                 self._stoich,
                 time_step.dt,
                 _my_opts
             )
+            if len(jsf_sim_result) == 2:
+                xs, ts = jsf_sim_result
+            elif len(jsf_sim_result) == 3:
+                xs, ts, _ = jsf_sim_result
+            else:
+                raise ValueError("Return value from JumpSwitchFlowSimulator is malformed.")
+            # -------------------------------------------------------
+
             # print clean line
             print('\033[2K', end='\r')
 
