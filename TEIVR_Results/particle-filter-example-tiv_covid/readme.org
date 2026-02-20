@@ -81,7 +81,7 @@ Use the following to set up a virtual environment.
 #+begin_src sh
   python3 -m venv venv
   source venv/bin/activate
-  pip install -U pip
+  pip install -U pip setuptools wheel
   pip install -r requirements.txt
 #+end_src
 
@@ -97,10 +97,25 @@ To type-check the code, and confirm I am not making any wildly obvious errors, t
   mypy run-inf-cli.py run-inference-from-simulation.py src/inf.py
 #+end_src
 
---------------------------------------------------------------------------------
+** How do I run this on other versions of Python?
+
+The following is not recommended, but might work if you are having
+trouble with the recommended path.
+
+#+begin_src sh
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install -U pip setuptools wheel
+  pip install git+https://github.com/DGermano8/jsf.git
+  pip install matplotlib numpy pandas plotnine pypfilt scipy statsmodels
+  # Careful with these!
+  pip install PyQt5
+  pip install python-libsbml
+#+end_src
+
 * Running the inference computations
 
-The model is written in [[file:./src/tiv.py]]. The model is defined as a =jsf= method. 
+The model is written in [[file:./src/tiv.py]]. The model is defined as a =jsf= method.
 
 - threshold parameter, \Omega, is set here: threshold = 100
 - Stoichiometric matricies are defined in the attributes =_nu_reactants= and =_nu_products=
