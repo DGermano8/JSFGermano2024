@@ -20,3 +20,14 @@ on the TEIVR model to estimate the model parameters. Here, we estimate
 viral reproduction number, and also estimate the probability of viral
 clearance for each patient. The directory `map-compute-demo' performs
 the R_0 estimates from the inference study.
+
+* FAQs
+
+** How do I install JSF?
+
+See the installation instructions on the [[https://github.com/DGermano8/jsf][JSF page]]. You probably just
+want the following
+
+#+begin_src sh
+pip install git+https://github.com/DGermano8/jsf.git
+#+end_src
