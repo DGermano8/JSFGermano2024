@@ -305,11 +305,15 @@ class Gaussian(Univariate):
         # my_y_vals[zero_mask] = -np.inf
         my_y_vals[np.logical_not(zero_mask)] = np.log10(snapshot.state_vec[self.unit][np.logical_not(zero_mask)])
         # NOTE For the zeros, we need to give them a value that
-        # indicates log10(0) in some way. We use -324 because in
-        # python it is true that (1e-323 > 0) but (1e-324 > 0)
-        # evaluates to false. Since we are only computing quantiles,
-        # this won't change the numerical values obtained.
-        my_y_vals[zero_mask] = -324
+        # indicates log10(0) in some way. We use -320 because in
+        # python (1e-320 > 0) evaluates to true, (1e-324 > 0) is
+        # false, and `np.isfinite(np.log10(1e-323))` is true while
+        # `np.isfinite(np.log10(1e-324))` is false. We have used -320
+        # rather than -323 to ensure a bit of wiggle room for the
+        # numerics but still to clearly indicate this should be close
+        # to zero. Since we are only computing quantiles, this won't
+        # change the numerical values obtained anyway.
+        my_y_vals[zero_mask] = -320
         my_weighted_sample = smws.DescrStatsW(my_y_vals, weights = snapshot.weights)
         
         # my_y_vals[np.logical_not(zero_mask)] = (snapshot.state_vec[self.unit][np.logical_not(zero_mask)])
