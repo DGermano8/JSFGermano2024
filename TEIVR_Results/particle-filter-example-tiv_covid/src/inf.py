@@ -71,6 +71,12 @@ def state_plt_p9(post_df: pd.DataFrame,
     """
     Plot the posterior distribution of the state as described by the
     data frame of posterior intervals and the actual observations.
+
+    NOTE in this plot, we need to use the `coord_cartesian` function
+    to ensure that the ribbons are plotted correctly, since using the
+    `limits` argument in the `scale_y_log10` function will will remove
+    the components that fall outside of the plot rather than clipping
+    them nicely.
     """
     return (ggplot()
             + geom_ribbon(
@@ -86,6 +92,7 @@ def state_plt_p9(post_df: pd.DataFrame,
             )
             + scale_y_log10(name = "Viral load")
             + scale_x_continuous(name = "Time post infection (days)")
+            + coord_cartesian(ylim = [10**(-1), 10**(10)])
             + labs(title = "State trajectory")
             + theme_bw())
 
